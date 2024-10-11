@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronómetro</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('https://c.wallhere.com/photos/fd/61/Deadpool_Marvel_Comics-226622.jpg!s1') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .timer-container {
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 300px; /* Ancho fijo para el contenedor */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333; /* Color oscuro para el texto */
+        }
+
+        #timer {
+            font-size: 3rem;
+            color: #FF6347; /* Color vibrante para el temporizador */
+            font-weight: bold;
+            margin: 20px 0; /* Espacio adicional para separación */
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Botones de ancho completo */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .reset-button {
+            background-color: #ff4d4d;
+        }
+
+        .reset-button:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="timer-container">
+        <h1>Cronómetro</h1>
+        <div id="timer">00:00:00</div> <!-- Mostrar el cronómetro -->
+        <button id="startButton">Iniciar</button>
+        <button id="pauseButton">Pausar</button>
+        <button id="resetButton" class="reset-button">Reiniciar</button>
+    </div>
+
+    <script>
+        let startTime; // Momento en que se inicia el cronómetro
+        let elapsedTime = 0; // Tiempo transcurrido
+        let timerInterval; // Intervalo del cronómetro
+        let isRunning = false; // Estado de ejecución del cronómetro
+
+        const timerDisplay = document.getElementById('timer');
+
+        // Función para actualizar el cronómetro
+        function updateTimer() {
+            const currentTime = Date.now(); // Momento actual
+            elapsedTime = currentTime - startTime; // Tiempo transcurrido desde que se inició
+            const totalSeconds = Math.floor(elapsedTime / 1000); // Convertir a segundos
+
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0'); // Horas
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0'); // Minutos
+            const seconds = String(totalSeconds % 60).padStart(2, '0'); // Segundos
+
+            timerDisplay.textContent = `${hours}:${minutes}:${seconds}`; // Actualiza la visualización
+        }
+
+        // Función para iniciar el cronómetro
+        document.getElementById('startButton').addEventListener('click', () => {
+            if (!isRunning) {
+                isRunning = true; // Cambia el estado a ejecutando
+                startTime = Date.now() - elapsedTime; // Establece el momento de inicio
+                timerInterval = setInterval(updateTimer, 1000); // Actualiza el cronómetro cada segundo
+            }
+        });
+
+        // Función para pausar el cronómetro
+        document.getElementById('pauseButton').addEventListener('click', () => {
+            clearInterval(timerInterval); // Detiene el intervalo
+            isRunning = false; // Cambia el estado a pausado
+        });
+
+        // Función para reiniciar el cronómetro
+        document.getElementById('resetButton').addEventListener('click', () => {
+            clearInterval(timerInterval); // Detiene el intervalo
+            elapsedTime = 0; // Restablece el tiempo transcurrido
+            timerDisplay.textContent = "00:00:00"; // Reinicia la visualización
+            isRunning = false; // Cambia el estado a pausado
+        });
+    </script>
+
+</body>
+</html>
